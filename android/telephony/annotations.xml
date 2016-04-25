@@ -1,0 +1,5 @@
+<root>
+  <item name='android.telephony.TelephonyManager EXTRA_STATE'>
+    <annotation name='java.lang.annotation.Deprecated' />
+  </item>
+</root>
