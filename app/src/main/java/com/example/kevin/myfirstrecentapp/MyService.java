@@ -8,6 +8,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Binder;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
@@ -23,8 +24,10 @@ public class MyService extends Service {
 
     private static final String CURRENTLY_DRIVING = "com.example.kevin.myfirstrecentapp.CURRENTLY_DRIVING";
     private static final String NOT_DRIVING = "com.example.kevin.myfirstrecentapp.NOT_DRIVING";
-
+    private static final String PREFERENCES = "myPreferencesFile";
+    private static final String AWAY_MESSAGE_KEY = "awayMessage";
     private static final int NOTIFICATION_ID = 001;
+
     BroadcastReceiver phoneReciever;
     BroadcastReceiver statusChangeReciever;
 
@@ -70,15 +73,20 @@ public class MyService extends Service {
 
     @Override
     public void onCreate() {
-
         notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        //Toast.makeText(this, "Service is now running.", Toast.LENGTH_LONG).show();
         IntentFilter phoneFilter = new IntentFilter();
         IntentFilter statusChangeFilter = new IntentFilter();
 
+        // Set up the filter so that it catches the following intent broadcasts
         phoneFilter.addAction("android.intent.action.PHONE_STATE");
         statusChangeFilter.addAction(NOT_DRIVING);
         statusChangeFilter.addAction(CURRENTLY_DRIVING);
+
+
+        SharedPreferences settings = getSharedPreferences(PREFERENCES, 0);
+        // Grabs the saved away message if it exists. If not, use the default one.
+        String savedAwayMessage = settings.getString(AWAY_MESSAGE_KEY, awayMessage);
+        awayMessage = savedAwayMessage;
 
         phoneReciever = new PhoneReceiver();
         statusChangeReciever = new StatusChangeReceiver();
@@ -120,8 +128,6 @@ public class MyService extends Service {
                     //killCall(context);
                     sendSMS(incomingNumber, awayMessage);
                 }
-            } else {
-                // Don't do anything, and let the call go through normally
             }
         }
     }
@@ -133,8 +139,12 @@ public class MyService extends Service {
     public Status getStatus() { return currentStatus; }
     public String getAwayMessage() { return awayMessage; }
 
+    // Also saves the message to the sharedpreferences file automatically
     public void setAwayMessage(String newMessage) {
         awayMessage = newMessage;
+        SharedPreferences settings = getSharedPreferences(PREFERENCES, 0);
+        settings.edit().putString(AWAY_MESSAGE_KEY, awayMessage);
+        settings.edit().commit();
     }
 
 
@@ -143,7 +153,7 @@ public class MyService extends Service {
         try {
             SmsManager smsManager = SmsManager.getDefault();
             smsManager.sendTextMessage(phoneNo, null, msg, null, null);
-            Toast.makeText(getApplicationContext(), "Message Sent",
+            Toast.makeText(getApplicationContext(), "Away message sent to " + phoneNo,
                     Toast.LENGTH_LONG).show();
         } catch (Exception ex) {
             Toast.makeText(getApplicationContext(),ex.getMessage().toString(),
