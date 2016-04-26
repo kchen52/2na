@@ -34,6 +34,16 @@ public class MyService extends Service {
                 .setContentText("Hello world!")
                 .setOngoing(true);
 
+        Intent resultIntent = new Intent(this, CurrentDrivingOrNot.class);
+        PendingIntent resultPendingIntent =
+                PendingIntent.getActivity(
+                        this,
+                        0,
+                        resultIntent,
+                        PendingIntent.FLAG_UPDATE_CURRENT
+                );
+
+        myBuilder.setContentIntent(resultPendingIntent);
         notificationManager.notify(1, myBuilder.build());
     }
 
