@@ -20,7 +20,13 @@ import android.widget.Toast;
 import java.lang.reflect.Method;
 
 public class MyService extends Service {
-    BroadcastReceiver myReceiver;
+
+    private static final String CURRENTLY_DRIVING = "com.example.kevin.myfirstrecentapp.CURRENTLY_DRIVING";
+    private static final String NOT_DRIVING = "com.example.kevin.myfirstrecentapp.NOT_DRIVING";
+
+    BroadcastReceiver phoneReciever;
+    BroadcastReceiver statusChangeReciever;
+
 
     private Status currentStatus = Status.NOT_DRIVING;
     private String awayMessage = "I'm currently driving, and I can't pick up the phone right now.";
@@ -51,11 +57,18 @@ public class MyService extends Service {
     @Override
     public void onCreate() {
         notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        Toast.makeText(this, "Service is now running.", Toast.LENGTH_LONG).show();
-        IntentFilter filter = new IntentFilter();
-        filter.addAction("android.intent.action.PHONE_STATE");
-        myReceiver = new PhoneReceiver();
-        registerReceiver(myReceiver, filter);
+        //Toast.makeText(this, "Service is now running.", Toast.LENGTH_LONG).show();
+        IntentFilter phoneFilter = new IntentFilter();
+        IntentFilter statusChangeFilter = new IntentFilter();
+
+        phoneFilter.addAction("android.intent.action.PHONE_STATE");
+        statusChangeFilter.addAction(NOT_DRIVING);
+        statusChangeFilter.addAction(CURRENTLY_DRIVING);
+
+        phoneReciever = new PhoneReceiver();
+        statusChangeReciever = new StatusChangeReceiver();
+        registerReceiver(statusChangeReciever, statusChangeFilter);
+        registerReceiver(phoneReciever, phoneFilter);
         showNotification();
     }
 
@@ -65,6 +78,22 @@ public class MyService extends Service {
         return null;
     }
 
+    public class StatusChangeReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            //Toast.makeText(context, intent.getAction(), Toast.LENGTH_LONG).show();
+            if (intent.getAction().equals(NOT_DRIVING)) {
+                Toast.makeText(context, "Changing status to NOT DRIVING", Toast.LENGTH_LONG).show();
+                currentStatus = Status.NOT_DRIVING;
+            } else if (intent.getAction().equals(CURRENTLY_DRIVING)) {
+                Toast.makeText(context, "Changing status to DRIVING", Toast.LENGTH_LONG).show();
+                currentStatus = Status.DRIVING;
+            } else {
+                Toast.makeText(context, "You shouldn't be seeing this.", Toast.LENGTH_LONG).show();
+            }
+
+        }
+    }
 
     public class PhoneReceiver extends BroadcastReceiver {
         @Override
