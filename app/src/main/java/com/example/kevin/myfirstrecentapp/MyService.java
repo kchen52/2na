@@ -24,6 +24,7 @@ public class MyService extends Service {
     private static final String CURRENTLY_DRIVING = "com.example.kevin.myfirstrecentapp.CURRENTLY_DRIVING";
     private static final String NOT_DRIVING = "com.example.kevin.myfirstrecentapp.NOT_DRIVING";
 
+    private static final int NOTIFICATION_ID = 001;
     BroadcastReceiver phoneReciever;
     BroadcastReceiver statusChangeReciever;
 
@@ -33,9 +34,36 @@ public class MyService extends Service {
 
     private NotificationManager notificationManager;
 
+    private void updateNotification(Status status) {
+        NotificationCompat.Builder myBuilder = new NotificationCompat.Builder(this);
+        if (status == Status.DRIVING) {
+            myBuilder.setSmallIcon(R.drawable.small_icon)
+                    .setContentTitle("Currently driving.")
+                    .setContentText("Will send a text to callers.")
+                    .setOngoing(true);
+        } else if (status == Status.NOT_DRIVING) {
+            myBuilder.setSmallIcon(R.drawable.small_icon)
+                    .setContentTitle("Currently not driving.")
+                    .setContentText("Not gonna do anything lol.")
+                    .setOngoing(true);
+        }
+
+        Intent resultIntent = new Intent(this, CurrentDrivingOrNot.class);
+        PendingIntent resultPendingIntent =
+                PendingIntent.getActivity(
+                        this,
+                        0,
+                        resultIntent,
+                        PendingIntent.FLAG_UPDATE_CURRENT
+                );
+
+        myBuilder.setContentIntent(resultPendingIntent);
+
+        notificationManager.notify(NOTIFICATION_ID, myBuilder.build());
+    }
     private void showNotification() {
         NotificationCompat.Builder myBuilder = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.drawable.status_icon)
+                .setSmallIcon(R.drawable.small_icon)
                 .setContentTitle("My notification")
                 .setContentText("Hello world!")
                 .setOngoing(true);
@@ -50,7 +78,7 @@ public class MyService extends Service {
                 );
 
         myBuilder.setContentIntent(resultPendingIntent);
-        notificationManager.notify(1, myBuilder.build());
+        notificationManager.notify(NOTIFICATION_ID, myBuilder.build());
     }
 
 
@@ -81,16 +109,14 @@ public class MyService extends Service {
     public class StatusChangeReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            //Toast.makeText(context, intent.getAction(), Toast.LENGTH_LONG).show();
             if (intent.getAction().equals(NOT_DRIVING)) {
                 Toast.makeText(context, "Changing status to NOT DRIVING", Toast.LENGTH_LONG).show();
                 currentStatus = Status.NOT_DRIVING;
             } else if (intent.getAction().equals(CURRENTLY_DRIVING)) {
                 Toast.makeText(context, "Changing status to DRIVING", Toast.LENGTH_LONG).show();
                 currentStatus = Status.DRIVING;
-            } else {
-                Toast.makeText(context, "You shouldn't be seeing this.", Toast.LENGTH_LONG).show();
             }
+            updateNotification(currentStatus);
 
         }
     }
@@ -98,7 +124,7 @@ public class MyService extends Service {
     public class PhoneReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (!(currentStatus == Status.NOT_DRIVING)) {
+            if (currentStatus == Status.DRIVING) {
                 if (intent.getStringExtra(TelephonyManager.EXTRA_STATE).equals(TelephonyManager.EXTRA_STATE_RINGING)) {
                     // Incoming call
                     String incomingNumber = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER);
