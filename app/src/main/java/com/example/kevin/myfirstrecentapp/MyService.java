@@ -1,5 +1,8 @@
 package com.example.kevin.myfirstrecentapp;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -8,6 +11,7 @@ import android.content.IntentFilter;
 import android.os.Binder;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.support.v4.app.NotificationCompat;
 import android.telephony.SmsManager;
 import android.telephony.TelephonyManager;
 import android.util.Log;
@@ -21,13 +25,28 @@ public class MyService extends Service {
     private Status currentStatus = Status.NOT_DRIVING;
     private String awayMessage = "I'm currently driving, and I can't pick up the phone right now.";
 
+    private NotificationManager notificationManager;
+
+    private void showNotification() {
+        NotificationCompat.Builder myBuilder = new NotificationCompat.Builder(this)
+                .setSmallIcon(R.drawable.status_icon)
+                .setContentTitle("My notification")
+                .setContentText("Hello world!")
+                .setOngoing(true);
+
+        notificationManager.notify(1, myBuilder.build());
+    }
+
+
     @Override
     public void onCreate() {
+        notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         Toast.makeText(this, "Service is now running.", Toast.LENGTH_LONG).show();
         IntentFilter filter = new IntentFilter();
         filter.addAction("android.intent.action.PHONE_STATE");
         myReceiver = new PhoneReceiver();
         registerReceiver(myReceiver, filter);
+        showNotification();
     }
 
     @Nullable
