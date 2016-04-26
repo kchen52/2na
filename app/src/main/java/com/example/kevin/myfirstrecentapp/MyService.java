@@ -61,29 +61,16 @@ public class MyService extends Service {
 
         notificationManager.notify(NOTIFICATION_ID, myBuilder.build());
     }
-    private void showNotification() {
-        NotificationCompat.Builder myBuilder = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.drawable.small_icon)
-                .setContentTitle("My notification")
-                .setContentText("Hello world!")
-                .setOngoing(true);
 
-        Intent resultIntent = new Intent(this, CurrentDrivingOrNot.class);
-        PendingIntent resultPendingIntent =
-                PendingIntent.getActivity(
-                        this,
-                        0,
-                        resultIntent,
-                        PendingIntent.FLAG_UPDATE_CURRENT
-                );
-
-        myBuilder.setContentIntent(resultPendingIntent);
-        notificationManager.notify(NOTIFICATION_ID, myBuilder.build());
+    private void createNotification() {
+        // Default by setting it in non-driving mode
+        updateNotification(Status.NOT_DRIVING);
     }
 
 
     @Override
     public void onCreate() {
+
         notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         //Toast.makeText(this, "Service is now running.", Toast.LENGTH_LONG).show();
         IntentFilter phoneFilter = new IntentFilter();
@@ -97,7 +84,7 @@ public class MyService extends Service {
         statusChangeReciever = new StatusChangeReceiver();
         registerReceiver(statusChangeReciever, statusChangeFilter);
         registerReceiver(phoneReciever, phoneFilter);
-        showNotification();
+        createNotification();
     }
 
     @Nullable
