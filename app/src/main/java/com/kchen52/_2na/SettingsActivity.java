@@ -58,11 +58,12 @@ public class SettingsActivity extends Activity {
 
         setupNFCButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                if (myNfcAdapter == null) {
+                Toast.makeText(getApplicationContext(), "Not yet implemented.", Toast.LENGTH_LONG).show();
+                /*if (myNfcAdapter == null) {
                     Toast.makeText(getApplicationContext(), "This device doesn't support NFC.", Toast.LENGTH_LONG).show();
                 } else {
                     Toast.makeText(getApplicationContext(), "This device supports NFC.", Toast.LENGTH_LONG).show();
-                }
+                }*/
 
 
             }

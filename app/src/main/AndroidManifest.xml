@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.kchen52._2na">
-    <uses-sdk android:minSdkVersion="10"
-        android:targetSdkVersion="17"/>
+
+    <uses-sdk
+        android:minSdkVersion="10"
+        android:targetSdkVersion="17" />
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.SEND_SMS" />
     <uses-permission android:name="android.permission.BIND_NFC_SERVICE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
-    <uses-feature android:name="android.hardware.nfc"/>
+    <uses-feature android:name="android.hardware.nfc" />
 
     <application
         android:allowBackup="true"
@@ -30,13 +32,26 @@
 
         <service
             android:name=".MyService"
-            android:exported="false" />
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.kchen52._2na.MyService" />
+            </intent-filter>
+        </service>
+
+        <receiver
+            android:name=".StartMyServiceAtBootReceiver"
+            android:label="StartMyServiceAtBootReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
 
         <activity
             android:name=".SettingsActivity"
-            android:label="SettingsActivity">
-            <!--android:theme="@android:style/Theme.Translucent.NoTitleBar">-->
-        </activity>
+            android:label="SettingsActivity" />
+
     </application>
 
 </manifest>

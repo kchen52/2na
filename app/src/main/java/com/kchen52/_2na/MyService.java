@@ -44,12 +44,12 @@ public class MyService extends Service {
         if (status == Status.DRIVING) {
             myBuilder.setSmallIcon(com.kchen52._2na.R.mipmap.ic_directions_car_black_24dp)
                     .setContentTitle("Currently driving.")
-                    .setContentText("Will send a text to callers.")
+                    .setContentText("Will send a text message to callers.")
                     .setOngoing(true);
         } else if (status == Status.NOT_DRIVING) {
             myBuilder.setSmallIcon(com.kchen52._2na.R.mipmap.ic_directions_walk_black_24dp)
                     .setContentTitle("Currently not driving.")
-                    .setContentText("Not gonna do anything lol.")
+                    //.setContentText("Not gonna do anything lol.")
                     .setOngoing(true);
         }
 
@@ -97,13 +97,15 @@ public class MyService extends Service {
         notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         IntentFilter phoneFilter = new IntentFilter();
         IntentFilter statusChangeFilter = new IntentFilter();
+        IntentFilter bootCompletedFilter = new IntentFilter();
 
-        // Set up the filter so that it catches the following intent broadcasts
+        // Set up each filter so that it catches the following intent broadcasts
         phoneFilter.addAction("android.intent.action.PHONE_STATE");
         statusChangeFilter.addAction(NOT_DRIVING);
         statusChangeFilter.addAction(CURRENTLY_DRIVING);
         statusChangeFilter.addAction(MESSAGE_CHANGED);
 
+        // TODO: Allow the user to choose whether the app starts on boot automatically
         SharedPreferences settings = getApplicationContext().getSharedPreferences(PREFERENCES, Activity.MODE_PRIVATE);
 
         if (!settings.contains(AWAY_MESSAGE_KEY)) {
@@ -111,12 +113,14 @@ public class MyService extends Service {
             editor.putString(AWAY_MESSAGE_KEY, awayMessage);
             editor.commit();
         }
+
         // Grabs the saved away message if it exists. If not, use the default one.
         String savedAwayMessage = settings.getString(AWAY_MESSAGE_KEY, awayMessage);
         awayMessage = savedAwayMessage;
 
         phoneReceiver = new PhoneReceiver();
         statusChangeReceiver = new StatusChangeReceiver();
+
         registerReceiver(statusChangeReceiver, statusChangeFilter);
         registerReceiver(phoneReceiver, phoneFilter);
         createNotification();
