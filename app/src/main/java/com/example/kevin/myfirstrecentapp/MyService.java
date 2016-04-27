@@ -16,7 +16,10 @@ import android.support.v4.app.NotificationCompat;
 import android.telephony.SmsManager;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+import android.widget.RemoteViews;
 import android.widget.Toast;
+
+import org.junit.experimental.categories.Categories;
 
 import java.lang.reflect.Method;
 
@@ -39,6 +42,8 @@ public class MyService extends Service {
 
     private void updateNotification(Status status) {
         NotificationCompat.Builder myBuilder = new NotificationCompat.Builder(this);
+        //RemoteViews remoteViews = new RemoteViews(getPackageName(), R.layout.notification);
+
         if (status == Status.DRIVING) {
             myBuilder.setSmallIcon(R.drawable.small_icon)
                     .setContentTitle("Currently driving.")
@@ -51,16 +56,33 @@ public class MyService extends Service {
                     .setOngoing(true);
         }
 
-        Intent resultIntent = new Intent(this, CurrentDrivingOrNot.class);
-        PendingIntent resultPendingIntent =
-                PendingIntent.getActivity(
-                        this,
-                        0,
-                        resultIntent,
-                        PendingIntent.FLAG_UPDATE_CURRENT
-                );
+        // Setting up some intents that'll happen when user hits on them in the notification
 
-        myBuilder.setContentIntent(resultPendingIntent);
+        // Starts up the main activity where the user can change settings and stuff
+        Intent startMainActivity = new Intent(this, CurrentDrivingOrNot.class);
+        PendingIntent startMainActivity_PI =
+            PendingIntent.getActivity(this, 0, startMainActivity, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        // Changes the current status to driving
+        Intent broadcastDriving = new Intent();
+        broadcastDriving.setAction(CURRENTLY_DRIVING);
+        PendingIntent broadcastDriving_PI =
+            PendingIntent.getBroadcast(this, 0, broadcastDriving, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        // Changes the current status to not driving
+        Intent broadcastNotDriving = new Intent();
+        broadcastNotDriving.setAction(NOT_DRIVING);
+        PendingIntent broadcastNotDriving_PI =
+                PendingIntent.getBroadcast(this, 0, broadcastNotDriving, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        myBuilder.addAction(R.drawable.small_icon, "Driving", broadcastDriving_PI);
+        myBuilder.addAction(R.drawable.small_icon, "Not Driving", broadcastNotDriving_PI);
+        myBuilder.setCategory(Notification.CATEGORY_SERVICE);
+        // Makes it so that the phone doesn't have to be unlocked to change status
+        myBuilder.setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
+        // Set it so it uses a custom layout
+        //myBuilder.setContent(remoteViews);
+        myBuilder.setContentIntent(startMainActivity_PI);
 
         notificationManager.notify(NOTIFICATION_ID, myBuilder.build());
     }
