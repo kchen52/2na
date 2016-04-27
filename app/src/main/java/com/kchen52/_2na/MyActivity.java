@@ -13,8 +13,15 @@ public class MyActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Intent intent = new Intent(this, MyService.class);
-        startService(intent);
+        Intent intent = null;
+        if (MyService.isRunning) {
+            intent = new Intent(this, SettingsActivity.class);
+            startActivity(intent);
+        } else {
+            intent = new Intent(this, MyService.class);
+            startService(intent);
+        }
+
         finish();
     }
 

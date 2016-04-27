@@ -21,6 +21,8 @@ import java.lang.reflect.Method;
 
 public class MyService extends Service {
 
+    public static boolean isRunning = false;
+
     private static final String CURRENTLY_DRIVING = "com.kchen52._2na.CURRENTLY_DRIVING";
     private static final String NOT_DRIVING = "com.kchen52._2na.NOT_DRIVING";
     private static final String MESSAGE_CHANGED = "com.kchen52._2na.MESSAGE_CHANGED";
@@ -29,7 +31,7 @@ public class MyService extends Service {
     private static final int NOTIFICATION_ID = 001;
 
     BroadcastReceiver phoneReceiver;
-    BroadcastReceiver statusChangeReciever;
+    BroadcastReceiver statusChangeReceiver;
 
     private Status currentStatus = Status.NOT_DRIVING;
     private String awayMessage = "I'm currently driving, and I can't pick up the phone right now.";
@@ -91,6 +93,7 @@ public class MyService extends Service {
 
     @Override
     public void onCreate() {
+        isRunning = true;
         notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         IntentFilter phoneFilter = new IntentFilter();
         IntentFilter statusChangeFilter = new IntentFilter();
@@ -113,8 +116,8 @@ public class MyService extends Service {
         awayMessage = savedAwayMessage;
 
         phoneReceiver = new PhoneReceiver();
-        statusChangeReciever = new StatusChangeReceiver();
-        registerReceiver(statusChangeReciever, statusChangeFilter);
+        statusChangeReceiver = new StatusChangeReceiver();
+        registerReceiver(statusChangeReceiver, statusChangeFilter);
         registerReceiver(phoneReceiver, phoneFilter);
         createNotification();
     }
