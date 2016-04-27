@@ -45,12 +45,12 @@ public class MyService extends Service {
         //RemoteViews remoteViews = new RemoteViews(getPackageName(), R.layout.notification);
 
         if (status == Status.DRIVING) {
-            myBuilder.setSmallIcon(R.drawable.small_icon)
+            myBuilder.setSmallIcon(R.mipmap.ic_directions_car_black_24dp)
                     .setContentTitle("Currently driving.")
                     .setContentText("Will send a text to callers.")
                     .setOngoing(true);
         } else if (status == Status.NOT_DRIVING) {
-            myBuilder.setSmallIcon(R.drawable.small_icon)
+            myBuilder.setSmallIcon(R.mipmap.ic_directions_walk_black_24dp)
                     .setContentTitle("Currently not driving.")
                     .setContentText("Not gonna do anything lol.")
                     .setOngoing(true);
@@ -75,8 +75,8 @@ public class MyService extends Service {
         PendingIntent broadcastNotDriving_PI =
                 PendingIntent.getBroadcast(this, 0, broadcastNotDriving, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        myBuilder.addAction(R.drawable.small_icon, "Driving", broadcastDriving_PI);
-        myBuilder.addAction(R.drawable.small_icon, "Not Driving", broadcastNotDriving_PI);
+        myBuilder.addAction(R.mipmap.ic_directions_car_black_24dp, "Driving", broadcastDriving_PI);
+        myBuilder.addAction(R.mipmap.ic_directions_walk_black_24dp, "Not Driving", broadcastNotDriving_PI);
         myBuilder.setCategory(Notification.CATEGORY_SERVICE);
         // Makes it so that the phone doesn't have to be unlocked to change status
         myBuilder.setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
@@ -127,10 +127,8 @@ public class MyService extends Service {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(NOT_DRIVING)) {
-                Toast.makeText(context, "Changing status to NOT DRIVING", Toast.LENGTH_LONG).show();
                 currentStatus = Status.NOT_DRIVING;
             } else if (intent.getAction().equals(CURRENTLY_DRIVING)) {
-                Toast.makeText(context, "Changing status to DRIVING", Toast.LENGTH_LONG).show();
                 currentStatus = Status.DRIVING;
             }
             updateNotification(currentStatus);
