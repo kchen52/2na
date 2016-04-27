@@ -21,7 +21,6 @@ public class MyActivity extends Activity {
             intent = new Intent(this, MyService.class);
             startService(intent);
         }
-
         finish();
     }
 
