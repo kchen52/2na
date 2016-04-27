@@ -1,5 +1,6 @@
 package com.example.kevin.myfirstrecentapp;
 
+import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -27,13 +28,13 @@ public class MyService extends Service {
 
     private static final String CURRENTLY_DRIVING = "com.example.kevin.myfirstrecentapp.CURRENTLY_DRIVING";
     private static final String NOT_DRIVING = "com.example.kevin.myfirstrecentapp.NOT_DRIVING";
+    private static final String MESSAGE_CHANGED = "com.example.kevin.myfirstrecentapp.MESSAGE_CHANGED";
     private static final String PREFERENCES = "myPreferencesFile";
     private static final String AWAY_MESSAGE_KEY = "awayMessage";
     private static final int NOTIFICATION_ID = 001;
 
-    BroadcastReceiver phoneReciever;
+    BroadcastReceiver phoneReceiver;
     BroadcastReceiver statusChangeReciever;
-
 
     private Status currentStatus = Status.NOT_DRIVING;
     private String awayMessage = "I'm currently driving, and I can't pick up the phone right now.";
@@ -59,7 +60,7 @@ public class MyService extends Service {
         // Setting up some intents that'll happen when user hits on them in the notification
 
         // Starts up the main activity where the user can change settings and stuff
-        Intent startMainActivity = new Intent(this, CurrentDrivingOrNot.class);
+        Intent startMainActivity = new Intent(this, SettingsActivity.class);
         PendingIntent startMainActivity_PI =
             PendingIntent.getActivity(this, 0, startMainActivity, PendingIntent.FLAG_UPDATE_CURRENT);
 
@@ -80,8 +81,9 @@ public class MyService extends Service {
         myBuilder.setCategory(Notification.CATEGORY_SERVICE);
         // Makes it so that the phone doesn't have to be unlocked to change status
         myBuilder.setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
-        // Set it so it uses a custom layout
-        //myBuilder.setContent(remoteViews);
+
+        // When the user hits the notification itself (not the buttons), start up the settings
+        // activity.
         myBuilder.setContentIntent(startMainActivity_PI);
 
         notificationManager.notify(NOTIFICATION_ID, myBuilder.build());
@@ -103,17 +105,25 @@ public class MyService extends Service {
         phoneFilter.addAction("android.intent.action.PHONE_STATE");
         statusChangeFilter.addAction(NOT_DRIVING);
         statusChangeFilter.addAction(CURRENTLY_DRIVING);
+        statusChangeFilter.addAction(MESSAGE_CHANGED);
 
 
-        SharedPreferences settings = getSharedPreferences(PREFERENCES, 0);
+
+        SharedPreferences settings = getApplicationContext().getSharedPreferences(PREFERENCES, Activity.MODE_PRIVATE);
+
+        if (!settings.contains(AWAY_MESSAGE_KEY)) {
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putString(AWAY_MESSAGE_KEY, awayMessage);
+            editor.commit();
+        }
         // Grabs the saved away message if it exists. If not, use the default one.
         String savedAwayMessage = settings.getString(AWAY_MESSAGE_KEY, awayMessage);
         awayMessage = savedAwayMessage;
 
-        phoneReciever = new PhoneReceiver();
+        phoneReceiver = new PhoneReceiver();
         statusChangeReciever = new StatusChangeReceiver();
         registerReceiver(statusChangeReciever, statusChangeFilter);
-        registerReceiver(phoneReciever, phoneFilter);
+        registerReceiver(phoneReceiver, phoneFilter);
         createNotification();
     }
 
@@ -128,11 +138,16 @@ public class MyService extends Service {
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(NOT_DRIVING)) {
                 currentStatus = Status.NOT_DRIVING;
+                updateNotification(currentStatus);
             } else if (intent.getAction().equals(CURRENTLY_DRIVING)) {
                 currentStatus = Status.DRIVING;
+                updateNotification(currentStatus);
+            } else if (intent.getAction().equals(MESSAGE_CHANGED)) {
+                SharedPreferences settings = getApplicationContext().getSharedPreferences(PREFERENCES, Activity.MODE_PRIVATE);
+                // Grabs the saved away message if it exists. If not, use the default one.
+                String newAwayMessage= settings.getString(AWAY_MESSAGE_KEY, "YOU SHOULD NOT BE SEEING THIS, FOOLISH MORTAL!");
+                awayMessage = newAwayMessage;
             }
-            updateNotification(currentStatus);
-
         }
     }
 
@@ -152,19 +167,13 @@ public class MyService extends Service {
         }
     }
 
-    public void setStatus(Status newStatus) {
-        currentStatus = newStatus;
-    }
-
-    public Status getStatus() { return currentStatus; }
-    public String getAwayMessage() { return awayMessage; }
-
     // Also saves the message to the sharedpreferences file automatically
     public void setAwayMessage(String newMessage) {
         awayMessage = newMessage;
-        SharedPreferences settings = getSharedPreferences(PREFERENCES, 0);
-        settings.edit().putString(AWAY_MESSAGE_KEY, awayMessage);
-        settings.edit().commit();
+        SharedPreferences settings = getApplicationContext().getSharedPreferences(PREFERENCES, Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putString(AWAY_MESSAGE_KEY, awayMessage);
+        editor.commit();
     }
 
 

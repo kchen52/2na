@@ -27,18 +27,10 @@
             android:name=".MyService"
             android:exported="false" />
 
-        <!--
-        <receiver android:name=".PhoneReceiver">
-            <intent-filter>
-                <action android:name="android.intent.action.PHONE_STATE"></action>
-            </intent-filter>
-        </receiver>
-        -->
-
         <activity
-            android:name=".CurrentDrivingOrNot"
-            android:label="@string/title_activity_current_driving_or_not"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar">
+            android:name=".SettingsActivity"
+            android:label="SettingsActivity">
+            <!--android:theme="@android:style/Theme.Translucent.NoTitleBar">-->
         </activity>
     </application>
 

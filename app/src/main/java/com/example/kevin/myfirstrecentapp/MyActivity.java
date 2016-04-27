@@ -12,16 +12,13 @@ import android.widget.Toast;
 
 public class MyActivity extends Activity {
 
-
+    // Launcher activity - just starts the service that does the actual work
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent intent = new Intent(this, MyService.class);
         startService(intent);
-
-        //setContentView(R.layout.activity_my);
-        //updateTextOnScreen();
         finish();
     }
 
