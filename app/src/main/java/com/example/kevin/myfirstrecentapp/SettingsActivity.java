@@ -1,10 +1,14 @@
 package com.example.kevin.myfirstrecentapp;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.nfc.NfcAdapter;
+import android.nfc.tech.NfcA;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -17,11 +21,14 @@ public class SettingsActivity extends Activity {
     private static final String PREFERENCES = "myPreferencesFile";
     private static final String AWAY_MESSAGE_KEY = "awayMessage";
 
+    @TargetApi(Build.VERSION_CODES.GINGERBREAD_MR1)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings_activity);
 
+
+        final NfcAdapter myNfcAdapter = NfcAdapter.getDefaultAdapter(this);
 
         final Button changeAwayTextButton = (Button) findViewById(R.id.changeAwayTextBtn);
         final Button setupNFCButton = (Button) findViewById(R.id.NFCSetupBtn);
@@ -45,13 +52,19 @@ public class SettingsActivity extends Activity {
                 Intent broadcastChangeOfAwayMessage= new Intent();
                 broadcastChangeOfAwayMessage.setAction("com.example.kevin.myfirstrecentapp.MESSAGE_CHANGED");
                 sendBroadcast(broadcastChangeOfAwayMessage);
-
+                Toast.makeText(getApplicationContext(), "Message saved.", Toast.LENGTH_LONG).show();
             }
         });
 
         setupNFCButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "Not yet implemented.", Toast.LENGTH_SHORT).show();
+                if (myNfcAdapter == null) {
+                    Toast.makeText(getApplicationContext(), "This device doesn't support NFC.", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(getApplicationContext(), "This device supports NFC.", Toast.LENGTH_LONG).show();
+                }
+
+
             }
         });
 

@@ -43,7 +43,6 @@ public class MyService extends Service {
 
     private void updateNotification(Status status) {
         NotificationCompat.Builder myBuilder = new NotificationCompat.Builder(this);
-        //RemoteViews remoteViews = new RemoteViews(getPackageName(), R.layout.notification);
 
         if (status == Status.DRIVING) {
             myBuilder.setSmallIcon(R.mipmap.ic_directions_car_black_24dp)
@@ -107,8 +106,6 @@ public class MyService extends Service {
         statusChangeFilter.addAction(CURRENTLY_DRIVING);
         statusChangeFilter.addAction(MESSAGE_CHANGED);
 
-
-
         SharedPreferences settings = getApplicationContext().getSharedPreferences(PREFERENCES, Activity.MODE_PRIVATE);
 
         if (!settings.contains(AWAY_MESSAGE_KEY)) {
@@ -145,7 +142,7 @@ public class MyService extends Service {
             } else if (intent.getAction().equals(MESSAGE_CHANGED)) {
                 SharedPreferences settings = getApplicationContext().getSharedPreferences(PREFERENCES, Activity.MODE_PRIVATE);
                 // Grabs the saved away message if it exists. If not, use the default one.
-                String newAwayMessage= settings.getString(AWAY_MESSAGE_KEY, "YOU SHOULD NOT BE SEEING THIS, FOOLISH MORTAL!");
+                String newAwayMessage= settings.getString(AWAY_MESSAGE_KEY, awayMessage);
                 awayMessage = newAwayMessage;
             }
         }
@@ -158,7 +155,6 @@ public class MyService extends Service {
                 if (intent.getStringExtra(TelephonyManager.EXTRA_STATE).equals(TelephonyManager.EXTRA_STATE_RINGING)) {
                     // Incoming call
                     String incomingNumber = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER);
-                    Toast.makeText(context, "Incoming call from: " + incomingNumber, Toast.LENGTH_LONG).show();
                     // Hang up, and send a text back saying "I'm driving lol"
                     //killCall(context);
                     sendSMS(incomingNumber, awayMessage);
