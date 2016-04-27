@@ -1,14 +1,10 @@
-package com.example.kevin.myfirstrecentapp;
+package com.kchen52._2na;
 
 import android.app.Activity;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 public class MyActivity extends Activity {
 
@@ -25,7 +21,7 @@ public class MyActivity extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_my, menu);
+        getMenuInflater().inflate(com.kchen52._2na.R.menu.menu_my, menu);
         return true;
     }
 
@@ -37,7 +33,7 @@ public class MyActivity extends Activity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == com.kchen52._2na.R.id.action_settings) {
             return true;
         }
 

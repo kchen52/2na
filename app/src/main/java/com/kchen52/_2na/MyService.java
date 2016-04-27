@@ -1,4 +1,4 @@
-package com.example.kevin.myfirstrecentapp;
+package com.kchen52._2na;
 
 import android.app.Activity;
 import android.app.Notification;
@@ -10,25 +10,20 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.os.Binder;
 import android.os.IBinder;
-import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.telephony.SmsManager;
 import android.telephony.TelephonyManager;
 import android.util.Log;
-import android.widget.RemoteViews;
 import android.widget.Toast;
-
-import org.junit.experimental.categories.Categories;
 
 import java.lang.reflect.Method;
 
 public class MyService extends Service {
 
-    private static final String CURRENTLY_DRIVING = "com.example.kevin.myfirstrecentapp.CURRENTLY_DRIVING";
-    private static final String NOT_DRIVING = "com.example.kevin.myfirstrecentapp.NOT_DRIVING";
-    private static final String MESSAGE_CHANGED = "com.example.kevin.myfirstrecentapp.MESSAGE_CHANGED";
+    private static final String CURRENTLY_DRIVING = "com.kchen52._2na.CURRENTLY_DRIVING";
+    private static final String NOT_DRIVING = "com.kchen52._2na.NOT_DRIVING";
+    private static final String MESSAGE_CHANGED = "com.kchen52._2na.MESSAGE_CHANGED";
     private static final String PREFERENCES = "myPreferencesFile";
     private static final String AWAY_MESSAGE_KEY = "awayMessage";
     private static final int NOTIFICATION_ID = 001;
@@ -45,12 +40,12 @@ public class MyService extends Service {
         NotificationCompat.Builder myBuilder = new NotificationCompat.Builder(this);
 
         if (status == Status.DRIVING) {
-            myBuilder.setSmallIcon(R.mipmap.ic_directions_car_black_24dp)
+            myBuilder.setSmallIcon(com.kchen52._2na.R.mipmap.ic_directions_car_black_24dp)
                     .setContentTitle("Currently driving.")
                     .setContentText("Will send a text to callers.")
                     .setOngoing(true);
         } else if (status == Status.NOT_DRIVING) {
-            myBuilder.setSmallIcon(R.mipmap.ic_directions_walk_black_24dp)
+            myBuilder.setSmallIcon(com.kchen52._2na.R.mipmap.ic_directions_walk_black_24dp)
                     .setContentTitle("Currently not driving.")
                     .setContentText("Not gonna do anything lol.")
                     .setOngoing(true);
@@ -75,8 +70,8 @@ public class MyService extends Service {
         PendingIntent broadcastNotDriving_PI =
                 PendingIntent.getBroadcast(this, 0, broadcastNotDriving, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        myBuilder.addAction(R.mipmap.ic_directions_car_black_24dp, "Driving", broadcastDriving_PI);
-        myBuilder.addAction(R.mipmap.ic_directions_walk_black_24dp, "Not Driving", broadcastNotDriving_PI);
+        myBuilder.addAction(com.kchen52._2na.R.mipmap.ic_directions_car_black_24dp, "Driving", broadcastDriving_PI);
+        myBuilder.addAction(com.kchen52._2na.R.mipmap.ic_directions_walk_black_24dp, "Not Driving", broadcastNotDriving_PI);
         myBuilder.setCategory(Notification.CATEGORY_SERVICE);
         // Makes it so that the phone doesn't have to be unlocked to change status
         myBuilder.setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
@@ -124,7 +119,6 @@ public class MyService extends Service {
         createNotification();
     }
 
-    @Nullable
     @Override
     public IBinder onBind(Intent intent) {
         return null;

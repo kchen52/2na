@@ -1,4 +1,4 @@
-package com.example.kevin.myfirstrecentapp;
+package com.kchen52._2na;
 
 /**
  * Created by Kevin on 2016-04-25.
