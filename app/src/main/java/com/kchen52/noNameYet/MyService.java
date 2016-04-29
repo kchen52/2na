@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.IBinder;
+import android.os.Vibrator;
 import android.support.v4.app.NotificationCompat;
 import android.telephony.SmsManager;
 import android.telephony.TelephonyManager;
@@ -25,6 +26,7 @@ public class MyService extends Service {
 
     private static final String CURRENTLY_DRIVING = "com.kchen52.noNameYet.CURRENTLY_DRIVING";
     private static final String NOT_DRIVING = "com.kchen52.noNameYet.NOT_DRIVING";
+    private static final String FLIP_STATUS = "com.kchen52.noNameYet.FLIP_STATUS";
     private static final String MESSAGE_CHANGED = "com.kchen52.noNameYet.MESSAGE_CHANGED";
     private static final String PREFERENCES = "myPreferencesFile";
     private static final String AWAY_MESSAGE_KEY = "awayMessage";
@@ -37,6 +39,7 @@ public class MyService extends Service {
     private String awayMessage = "I'm currently driving, and I can't pick up the phone right now.";
 
     private NotificationManager notificationManager;
+
 
     private void updateNotification(Status status) {
         NotificationCompat.Builder myBuilder = new NotificationCompat.Builder(this);
@@ -54,7 +57,6 @@ public class MyService extends Service {
         }
 
         // Setting up some intents that'll happen when user hits on them in the notification
-
         // Starts up the main activity where the user can change settings and stuff
         Intent startMainActivity = new Intent(this, SettingsActivity.class);
         PendingIntent startMainActivity_PI =
@@ -71,6 +73,13 @@ public class MyService extends Service {
         broadcastNotDriving.setAction(NOT_DRIVING);
         PendingIntent broadcastNotDriving_PI =
                 PendingIntent.getBroadcast(this, 0, broadcastNotDriving, PendingIntent.FLAG_UPDATE_CURRENT);
+
+
+        // Using the NotificationCompat.builder vibrate doesn't seem to work
+        // So I'm using this workaround for now
+        Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        v.vibrate(50);
+
 
         myBuilder.addAction(com.kchen52.noNameYet.R.mipmap.ic_directions_car_black_24dp, "Driving", broadcastDriving_PI);
         myBuilder.addAction(com.kchen52.noNameYet.R.mipmap.ic_directions_walk_black_24dp, "Not Driving", broadcastNotDriving_PI);
@@ -97,13 +106,14 @@ public class MyService extends Service {
         notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         IntentFilter phoneFilter = new IntentFilter();
         IntentFilter statusChangeFilter = new IntentFilter();
-        IntentFilter bootCompletedFilter = new IntentFilter();
 
         // Set up each filter so that it catches the following intent broadcasts
         phoneFilter.addAction("android.intent.action.PHONE_STATE");
+
         statusChangeFilter.addAction(NOT_DRIVING);
         statusChangeFilter.addAction(CURRENTLY_DRIVING);
         statusChangeFilter.addAction(MESSAGE_CHANGED);
+        statusChangeFilter.addAction(FLIP_STATUS);
 
         // TODO: Allow the user to choose whether the app starts on boot automatically
         SharedPreferences settings = getApplicationContext().getSharedPreferences(PREFERENCES, Activity.MODE_PRIVATE);
@@ -145,7 +155,18 @@ public class MyService extends Service {
                 // Grabs the saved away message if it exists. If not, use the default one.
                 String newAwayMessage= settings.getString(AWAY_MESSAGE_KEY, awayMessage);
                 awayMessage = newAwayMessage;
+            } else if (intent.getAction().equals(FLIP_STATUS)) {
+                flipStatus();
+                updateNotification(currentStatus);
             }
+        }
+    }
+
+    void flipStatus() {
+        if (currentStatus == Status.DRIVING) {
+            currentStatus = Status.NOT_DRIVING;
+        } else if (currentStatus == Status.NOT_DRIVING) {
+            currentStatus = Status.DRIVING;
         }
     }
 
@@ -163,16 +184,6 @@ public class MyService extends Service {
             }
         }
     }
-
-    // Also saves the message to the sharedpreferences file automatically
-    public void setAwayMessage(String newMessage) {
-        awayMessage = newMessage;
-        SharedPreferences settings = getApplicationContext().getSharedPreferences(PREFERENCES, Activity.MODE_PRIVATE);
-        SharedPreferences.Editor editor = settings.edit();
-        editor.putString(AWAY_MESSAGE_KEY, awayMessage);
-        editor.commit();
-    }
-
 
     //http://stackoverflow.com/questions/26311243/sending-sms-programmatically-without-opening-message-app
     private void sendSMS(String phoneNo, String msg){

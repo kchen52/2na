@@ -7,7 +7,8 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.kchen52._2na.SettingsActivity">
+    tools:context="com.kchen52.noNameYet.SettingsActivity"
+    android:id="@+id/gt2gtkjkj">
 
     <Button
         android:layout_width="wrap_content"
@@ -26,12 +27,22 @@
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Start on bootup?"
+        android:id="@+id/startOnBootupButton"
+        android:layout_below="@+id/NFCSetupBtn"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
     <EditText
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/editText"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="51dp" />
+        android:layout_marginTop="50dp" />
+
 
 </RelativeLayout>

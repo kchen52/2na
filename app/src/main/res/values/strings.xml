@@ -2,4 +2,5 @@
     <string name="app_name">noNameYet</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_current_driving_or_not">CurrentDrivingOrNot</string>
+    <string name="title_activity_nfcreceiver">NFCReceiverActivity</string>
 </resources>
