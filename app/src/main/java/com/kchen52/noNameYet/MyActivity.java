@@ -1,4 +1,4 @@
-package com.kchen52._2na;
+package com.kchen52.noNameYet;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -27,7 +27,7 @@ public class MyActivity extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(com.kchen52._2na.R.menu.menu_my, menu);
+        getMenuInflater().inflate(com.kchen52.noNameYet.R.menu.menu_my, menu);
         return true;
     }
 
@@ -39,7 +39,7 @@ public class MyActivity extends Activity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == com.kchen52._2na.R.id.action_settings) {
+        if (id == com.kchen52.noNameYet.R.id.action_settings) {
             return true;
         }
 

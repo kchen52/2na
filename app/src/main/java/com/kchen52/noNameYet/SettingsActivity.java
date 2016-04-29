@@ -1,4 +1,4 @@
-package com.kchen52._2na;
+package com.kchen52.noNameYet;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -25,19 +25,19 @@ public class SettingsActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(com.kchen52._2na.R.layout.settings_activity);
+        setContentView(com.kchen52.noNameYet.R.layout.settings_activity);
 
 
         final NfcAdapter myNfcAdapter = NfcAdapter.getDefaultAdapter(this);
 
-        final Button changeAwayTextButton = (Button) findViewById(com.kchen52._2na.R.id.changeAwayTextBtn);
-        final Button setupNFCButton = (Button) findViewById(com.kchen52._2na.R.id.NFCSetupBtn);
+        final Button changeAwayTextButton = (Button) findViewById(com.kchen52.noNameYet.R.id.changeAwayTextBtn);
+        final Button setupNFCButton = (Button) findViewById(com.kchen52.noNameYet.R.id.NFCSetupBtn);
 
         final SharedPreferences settings = getApplicationContext().getSharedPreferences(PREFERENCES, Activity.MODE_PRIVATE);
         // Grabs the saved away message if it exists. If not, use the default one.
         String savedAwayMessage = settings.getString(AWAY_MESSAGE_KEY, "I'm currently driving, and I can't pick up the phone right now.");
 
-        final EditText editAwayMessageText = (EditText) findViewById(com.kchen52._2na.R.id.editText);
+        final EditText editAwayMessageText = (EditText) findViewById(com.kchen52.noNameYet.R.id.editText);
 
         editAwayMessageText.setText(savedAwayMessage);
 
@@ -50,7 +50,7 @@ public class SettingsActivity extends Activity {
 
                 // Send a broadcast to the service indicating the away message has been changed
                 Intent broadcastChangeOfAwayMessage= new Intent();
-                broadcastChangeOfAwayMessage.setAction("com.kchen52._2na.MESSAGE_CHANGED");
+                broadcastChangeOfAwayMessage.setAction("com.kchen52.noNameYet.MESSAGE_CHANGED");
                 sendBroadcast(broadcastChangeOfAwayMessage);
                 Toast.makeText(getApplicationContext(), "Message saved.", Toast.LENGTH_LONG).show();
             }

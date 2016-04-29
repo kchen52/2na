@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.kchen52._2na">
+    package="com.kchen52.noNameYet">
 
     <uses-sdk
         android:minSdkVersion="10"
@@ -34,7 +34,7 @@
             android:name=".MyService"
             android:exported="false">
             <intent-filter>
-                <action android:name="com.kchen52._2na.MyService" />
+                <action android:name="com.kchen52.noNameYet.MyService" />
             </intent-filter>
         </service>
 

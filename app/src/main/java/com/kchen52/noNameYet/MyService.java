@@ -1,4 +1,4 @@
-package com.kchen52._2na;
+package com.kchen52.noNameYet;
 
 import android.app.Activity;
 import android.app.Notification;
@@ -23,9 +23,9 @@ public class MyService extends Service {
 
     public static boolean isRunning = false;
 
-    private static final String CURRENTLY_DRIVING = "com.kchen52._2na.CURRENTLY_DRIVING";
-    private static final String NOT_DRIVING = "com.kchen52._2na.NOT_DRIVING";
-    private static final String MESSAGE_CHANGED = "com.kchen52._2na.MESSAGE_CHANGED";
+    private static final String CURRENTLY_DRIVING = "com.kchen52.noNameYet.CURRENTLY_DRIVING";
+    private static final String NOT_DRIVING = "com.kchen52.noNameYet.NOT_DRIVING";
+    private static final String MESSAGE_CHANGED = "com.kchen52.noNameYet.MESSAGE_CHANGED";
     private static final String PREFERENCES = "myPreferencesFile";
     private static final String AWAY_MESSAGE_KEY = "awayMessage";
     private static final int NOTIFICATION_ID = 001;
@@ -42,12 +42,12 @@ public class MyService extends Service {
         NotificationCompat.Builder myBuilder = new NotificationCompat.Builder(this);
 
         if (status == Status.DRIVING) {
-            myBuilder.setSmallIcon(com.kchen52._2na.R.mipmap.ic_directions_car_black_24dp)
+            myBuilder.setSmallIcon(com.kchen52.noNameYet.R.mipmap.ic_directions_car_black_24dp)
                     .setContentTitle("Currently driving.")
                     .setContentText("Will send a text message to callers.")
                     .setOngoing(true);
         } else if (status == Status.NOT_DRIVING) {
-            myBuilder.setSmallIcon(com.kchen52._2na.R.mipmap.ic_directions_walk_black_24dp)
+            myBuilder.setSmallIcon(com.kchen52.noNameYet.R.mipmap.ic_directions_walk_black_24dp)
                     .setContentTitle("Currently not driving.")
                     //.setContentText("Not gonna do anything lol.")
                     .setOngoing(true);
@@ -72,8 +72,8 @@ public class MyService extends Service {
         PendingIntent broadcastNotDriving_PI =
                 PendingIntent.getBroadcast(this, 0, broadcastNotDriving, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        myBuilder.addAction(com.kchen52._2na.R.mipmap.ic_directions_car_black_24dp, "Driving", broadcastDriving_PI);
-        myBuilder.addAction(com.kchen52._2na.R.mipmap.ic_directions_walk_black_24dp, "Not Driving", broadcastNotDriving_PI);
+        myBuilder.addAction(com.kchen52.noNameYet.R.mipmap.ic_directions_car_black_24dp, "Driving", broadcastDriving_PI);
+        myBuilder.addAction(com.kchen52.noNameYet.R.mipmap.ic_directions_walk_black_24dp, "Not Driving", broadcastNotDriving_PI);
         myBuilder.setCategory(Notification.CATEGORY_SERVICE);
         // Makes it so that the phone doesn't have to be unlocked to change status
         myBuilder.setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
