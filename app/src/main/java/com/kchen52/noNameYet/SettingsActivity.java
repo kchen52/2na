@@ -31,7 +31,7 @@ public class SettingsActivity extends Activity {
         final NfcAdapter myNfcAdapter = NfcAdapter.getDefaultAdapter(this);
 
         final Button changeAwayTextButton = (Button) findViewById(com.kchen52.noNameYet.R.id.changeAwayTextBtn);
-        final Button setupNFCButton = (Button) findViewById(com.kchen52.noNameYet.R.id.NFCSetupBtn);
+        //final Button setupNFCButton = (Button) findViewById(com.kchen52.noNameYet.R.id.NFCSetupBtn);
 
         final SharedPreferences settings = getApplicationContext().getSharedPreferences(PREFERENCES, Activity.MODE_PRIVATE);
         // Grabs the saved away message if it exists. If not, use the default one.
@@ -56,7 +56,7 @@ public class SettingsActivity extends Activity {
             }
         });
 
-        setupNFCButton.setOnClickListener(new View.OnClickListener() {
+        /*setupNFCButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (myNfcAdapter == null) {
                     Toast.makeText(getApplicationContext(), "This device doesn't support NFC.", Toast.LENGTH_LONG).show();
@@ -67,7 +67,7 @@ public class SettingsActivity extends Activity {
 
 
             }
-        });
+        });*/
 
 
     }
