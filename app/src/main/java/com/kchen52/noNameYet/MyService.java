@@ -134,6 +134,7 @@ public class MyService extends Service {
         // Grabs the saved away message if it exists. If not, use the default one.
         String savedAwayMessage = settings.getString(AWAY_MESSAGE_KEY, awayMessage);
         awayMessage = savedAwayMessage;
+        hangupValue = settings.getBoolean(HANG_UP_KEY, false);
 
         phoneReceiver = new PhoneReceiver();
         statusChangeReceiver = new StatusChangeReceiver();
