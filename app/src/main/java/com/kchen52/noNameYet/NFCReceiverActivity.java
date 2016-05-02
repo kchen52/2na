@@ -13,6 +13,7 @@ public class NFCReceiverActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nfcreceiver);
 
+        // TODO: Validate the NFC tag
         // Send an intent to the main service switching DRIVING/NOT_DRIVING
         Intent intent = new Intent(FLIP_STATUS);
         sendBroadcast(intent);

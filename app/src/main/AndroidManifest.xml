@@ -21,11 +21,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MyActivity"
+            android:name=".SettingsActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -49,9 +48,8 @@
         </receiver>
 
         <activity
-            android:name=".SettingsActivity"
-            android:label="SettingsActivity" />
-
+            android:name=".SettingsActivity_OLD"
+            android:label="2na Settings" />
         <activity
             android:name=".NFCReceiverActivity"
             android:label="@string/title_activity_nfcreceiver">
@@ -63,6 +61,9 @@
                 <data android:mimeType="text/plain" />
             </intent-filter>
         </activity>
+        <!--<activity
+            android:name=".SettingsActivity"
+            android:label="@string/title_activity_settings"></activity>-->
     </application>
 
 </manifest>

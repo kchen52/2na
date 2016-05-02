@@ -15,7 +15,7 @@ public class MyActivity extends Activity {
         super.onCreate(savedInstanceState);
         Intent intent = null;
         if (MyService.isRunning) {
-            intent = new Intent(this, SettingsActivity.class);
+            intent = new Intent(this, SettingsActivity_OLD.class);
             startActivity(intent);
         } else {
             intent = new Intent(this, MyService.class);
