@@ -15,6 +15,4 @@ android.permission.CALL_PHONE - Needed this to reject calls for some reason.
 
 android.permission.SEND_SMS - To send a predefined message to the incoming caller when the app is set to Driving mode.
 
-android.permission.VIBRATE - To give the user feedback when they switch between Driving/Non-Driving states.
-
 android.permission.RECEIVE_BOOT_COMPLETED - To allow the app to start its service in the background after booting up the device. 
