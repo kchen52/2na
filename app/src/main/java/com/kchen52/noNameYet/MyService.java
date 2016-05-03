@@ -31,6 +31,8 @@ public class MyService extends Service {
     private static final String SETTINGS_CHANGED = "com.kchen52.noNameYet.SETTINGS_CHANGED";
     private static final String AWAY_MESSAGE_KEY = "awayText";
     private static final String HANG_UP_KEY = "automaticallyHangUpCalls";
+    // For grouping missed calls together as a notification
+    private static final String MISSED_CALL_GROUP = "missedCallGroup";
     private static final int NOTIFICATION_ID = 001;
     private int missedCallNotificationID = 2;
     BroadcastReceiver phoneReceiver;
@@ -248,10 +250,6 @@ public class MyService extends Service {
         myBuilder.setContentTitle("Missed call while driving.");
         myBuilder.setContentText("Call from " + numberMissed);
 
-        // TODO: Clicking on this notification starts the phone app with the phone number
-        // already punched in.
-
-        // TODO: Group missed call notifications together
         myBuilder.setVisibility(NotificationCompat.VISIBILITY_PRIVATE);
         myBuilder.setSmallIcon(R.drawable.ic_call_missed_black_24dp);
 
@@ -260,6 +258,7 @@ public class MyService extends Service {
 
         PendingIntent resultPendingIntent = PendingIntent.getActivity(this, 0, phoneIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         myBuilder.setContentIntent(resultPendingIntent);
+        myBuilder.setGroup(MISSED_CALL_GROUP);
 
         Notification notification = myBuilder.build();
         notification.flags = Notification.DEFAULT_LIGHTS | Notification.FLAG_AUTO_CANCEL;
