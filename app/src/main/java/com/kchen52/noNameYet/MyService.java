@@ -85,12 +85,8 @@ public class MyService extends Service {
         PendingIntent broadcastNotDriving_PI =
                 PendingIntent.getBroadcast(this, 0, broadcastNotDriving, PendingIntent.FLAG_UPDATE_CURRENT);
 
-
-        // Using the NotificationCompat.builder vibrate doesn't seem to work
-        // So I'm using this workaround for now
-        Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-        v.vibrate(50);
-
+        long[] pattern = {50, 50};
+        myBuilder.setVibrate(pattern);
 
         myBuilder.addAction(com.kchen52.noNameYet.R.mipmap.ic_directions_car_black_24dp, "Driving", broadcastDriving_PI);
         myBuilder.addAction(com.kchen52.noNameYet.R.mipmap.ic_directions_walk_black_24dp, "Not Driving", broadcastNotDriving_PI);
