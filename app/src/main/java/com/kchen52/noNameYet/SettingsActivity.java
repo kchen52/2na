@@ -46,7 +46,6 @@ public class SettingsActivity extends PreferenceActivity {
     SharedPreferences.OnSharedPreferenceChangeListener spChanged = new SharedPreferences.OnSharedPreferenceChangeListener() {
         @Override
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-            Toast.makeText(getApplicationContext(), "Changes updated.", Toast.LENGTH_LONG).show();
             Intent updateChanges = new Intent(SETTINGS_CHANGED);
             sendBroadcast(updateChanges);
         }
