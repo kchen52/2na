@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.IBinder;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
@@ -31,7 +32,7 @@ public class MyService extends Service {
     private static final String AWAY_MESSAGE_KEY = "awayText";
     private static final String HANG_UP_KEY = "automaticallyHangUpCalls";
     private static final int NOTIFICATION_ID = 001;
-
+    private int missedCallNotificationID = 2;
     BroadcastReceiver phoneReceiver;
     BroadcastReceiver statusChangeReceiver;
 
@@ -40,7 +41,6 @@ public class MyService extends Service {
     private boolean hangupValue = false;
 
     private NotificationManager notificationManager;
-
 
     private void updateNotification() {
         NotificationCompat.Builder myBuilder = new NotificationCompat.Builder(this);
@@ -192,6 +192,7 @@ public class MyService extends Service {
                     // If the user has set the app to automatically hang up calls, do so
                     if (hangupValue) {
                         killCall(context);
+                        createMissedCallNotification(incomingNumber);
                     }
                     // Regardless, send a SMS to the incoming caller with some user defined message
                     sendSMS(incomingNumber, awayMessage);
@@ -214,15 +215,11 @@ public class MyService extends Service {
         }
     }
 
-    //http://stackoverflow.com/questions/33266447/how-to-programmatically-reject-hang-up-incoming-call-on-android-in-delphi
     //http://stackoverflow.com/questions/15012082/rejecting-incoming-call-in-android
     private boolean killCall(Context context) {
-        Toast.makeText(getApplicationContext(), "Attempting to kill call...", Toast.LENGTH_SHORT).show();
-
         TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
         try {
             Class<?> classTelephony = Class.forName(telephonyManager.getClass().getName());
-            Toast.makeText(getApplicationContext(), "Check1", Toast.LENGTH_SHORT).show();
             Method method = classTelephony.getDeclaredMethod("getITelephony");
             // Disable access check
             method.setAccessible(true);
@@ -233,22 +230,41 @@ public class MyService extends Service {
             Class<?> telephonyInterfaceClass = Class.forName(telephonyInterface.getClass().getName());
             Method methodEndCall = telephonyInterfaceClass.getDeclaredMethod("endCall");
             // Invoke endCall()
-
-            Toast.makeText(getApplicationContext(), "Check2", Toast.LENGTH_SHORT).show();
             methodEndCall.invoke(telephonyInterface);
-            Toast.makeText(getApplicationContext(), "Check3", Toast.LENGTH_SHORT).show();
-
         } catch (ClassNotFoundException e) {
-            Toast.makeText(getApplicationContext(), "ClassNotFoundException thrown", Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
         } catch (NoSuchMethodException e) {
-            Toast.makeText(getApplicationContext(), "NoSuchMethodException thrown", Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
         } catch (InvocationTargetException e) {
-            Toast.makeText(getApplicationContext(), "InvocationTargetException thrown", Toast.LENGTH_SHORT).show();
             e.printStackTrace();
         } catch (IllegalAccessException e) {
-            Toast.makeText(getApplicationContext(), "IllegalAccessException thrown", Toast.LENGTH_SHORT).show();
             e.printStackTrace();
         }
         return true;
+    }
+
+    private void createMissedCallNotification(String numberMissed) {
+        NotificationCompat.Builder myBuilder = new NotificationCompat.Builder(this);
+        myBuilder.setContentTitle("Missed call while driving.");
+        myBuilder.setContentText("Call from " + numberMissed);
+
+        // TODO: Clicking on this notification starts the phone app with the phone number
+        // already punched in.
+
+        // TODO: Group missed call notifications together
+        myBuilder.setVisibility(NotificationCompat.VISIBILITY_PRIVATE);
+        myBuilder.setSmallIcon(R.drawable.ic_call_missed_black_24dp);
+
+        Intent phoneIntent = new Intent(Intent.ACTION_DIAL);
+        phoneIntent.setData(Uri.parse("tel:" + numberMissed));
+
+        PendingIntent resultPendingIntent = PendingIntent.getActivity(this, 0, phoneIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        myBuilder.setContentIntent(resultPendingIntent);
+
+        Notification notification = myBuilder.build();
+        notification.flags = Notification.DEFAULT_LIGHTS | Notification.FLAG_AUTO_CANCEL;
+        notificationManager.notify(missedCallNotificationID, notification);
+        // Increment it so that each new missed call has its own notification
+        missedCallNotificationID++;
     }
 }
