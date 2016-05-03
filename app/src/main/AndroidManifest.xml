@@ -8,7 +8,6 @@
 
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.SEND_SMS" />
-    <uses-permission android:name="android.permission.NFC" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
@@ -48,17 +47,6 @@
             </intent-filter>
         </receiver>
 
-        <activity
-            android:name=".NFCReceiverActivity"
-            android:label="@string/title_activity_nfcreceiver">
-            <intent-filter>
-                <action android:name="android.nfc.action.NDEF_DISCOVERED" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-
-                <data android:mimeType="text/plain" />
-            </intent-filter>
-        </activity>
         <!--<activity
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings"></activity>-->

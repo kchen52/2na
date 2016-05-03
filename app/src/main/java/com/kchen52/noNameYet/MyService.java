@@ -25,16 +25,20 @@ public class MyService extends Service {
 
     public static boolean isRunning = false;
 
+    // Custom intents we're broadcasting and receiving
     private static final String CURRENTLY_DRIVING = "com.kchen52.noNameYet.CURRENTLY_DRIVING";
     private static final String NOT_DRIVING = "com.kchen52.noNameYet.NOT_DRIVING";
-    private static final String FLIP_STATUS = "com.kchen52.noNameYet.FLIP_STATUS";
     private static final String SETTINGS_CHANGED = "com.kchen52.noNameYet.SETTINGS_CHANGED";
+
+    // Keys for the sharedpreference
     private static final String AWAY_MESSAGE_KEY = "awayText";
     private static final String HANG_UP_KEY = "automaticallyHangUpCalls";
+
     // For grouping missed calls together as a notification
     private static final String MISSED_CALL_GROUP = "missedCallGroup";
     private static final int NOTIFICATION_ID = 001;
     private int missedCallNotificationID = 2;
+
     BroadcastReceiver phoneReceiver;
     BroadcastReceiver statusChangeReceiver;
 
@@ -121,7 +125,6 @@ public class MyService extends Service {
         statusChangeFilter.addAction(NOT_DRIVING);
         statusChangeFilter.addAction(CURRENTLY_DRIVING);
         statusChangeFilter.addAction(SETTINGS_CHANGED);
-        statusChangeFilter.addAction(FLIP_STATUS);
 
         // TODO: Allow the user to choose whether the app starts on boot automatically
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
@@ -168,18 +171,8 @@ public class MyService extends Service {
                 awayMessage = newAwayMessage;
                 hangupValue = newHangupValue;
 
-            } else if (intent.getAction().equals(FLIP_STATUS)) {
-                flipStatus();
             }
             updateNotification();
-        }
-    }
-
-    void flipStatus() {
-        if (currentStatus == Status.DRIVING) {
-            currentStatus = Status.NOT_DRIVING;
-        } else if (currentStatus == Status.NOT_DRIVING) {
-            currentStatus = Status.DRIVING;
         }
     }
 
