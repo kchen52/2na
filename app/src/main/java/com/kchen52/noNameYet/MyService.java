@@ -222,6 +222,7 @@ public class MyService extends Service {
         TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
         try {
             Class<?> classTelephony = Class.forName(telephonyManager.getClass().getName());
+            Toast.makeText(getApplicationContext(), "Check1", Toast.LENGTH_SHORT).show();
             Method method = classTelephony.getDeclaredMethod("getITelephony");
             // Disable access check
             method.setAccessible(true);
@@ -232,7 +233,10 @@ public class MyService extends Service {
             Class<?> telephonyInterfaceClass = Class.forName(telephonyInterface.getClass().getName());
             Method methodEndCall = telephonyInterfaceClass.getDeclaredMethod("endCall");
             // Invoke endCall()
+
+            Toast.makeText(getApplicationContext(), "Check2", Toast.LENGTH_SHORT).show();
             methodEndCall.invoke(telephonyInterface);
+            Toast.makeText(getApplicationContext(), "Check3", Toast.LENGTH_SHORT).show();
 
         } catch (ClassNotFoundException e) {
             Toast.makeText(getApplicationContext(), "ClassNotFoundException thrown", Toast.LENGTH_SHORT).show();
