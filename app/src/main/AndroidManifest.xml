@@ -48,9 +48,6 @@
         </receiver>
 
         <activity
-            android:name=".SettingsActivity_OLD"
-            android:label="2na Settings" />
-        <activity
             android:name=".NFCReceiverActivity"
             android:label="@string/title_activity_nfcreceiver">
             <intent-filter>

@@ -1,6 +1,5 @@
 package com.kchen52.noNameYet;
 
-import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -16,9 +15,9 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.telephony.SmsManager;
 import android.telephony.TelephonyManager;
-import android.util.Log;
 import android.widget.Toast;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 public class MyService extends Service {
@@ -64,7 +63,7 @@ public class MyService extends Service {
 
         // Setting up some intents that'll happen when user hits on them in the notification
         // Starts up the main activity where the user can change settings and stuff
-        Intent startMainActivity = new Intent(this, SettingsActivity_OLD.class);
+        Intent startMainActivity = new Intent(this, SettingsActivity.class);
         PendingIntent startMainActivity_PI =
             PendingIntent.getActivity(this, 0, startMainActivity, PendingIntent.FLAG_UPDATE_CURRENT);
 
@@ -216,33 +215,35 @@ public class MyService extends Service {
     }
 
     //http://stackoverflow.com/questions/33266447/how-to-programmatically-reject-hang-up-incoming-call-on-android-in-delphi
+    //http://stackoverflow.com/questions/15012082/rejecting-incoming-call-in-android
     private boolean killCall(Context context) {
+        Toast.makeText(getApplicationContext(), "Attempting to kill call...", Toast.LENGTH_SHORT).show();
+
+        TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
         try {
-            // Get the boring old TelephonyManager
-            TelephonyManager telephonyManager =
-                    (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-
-            // Get the getITelephony() method
-            Class classTelephony = Class.forName(telephonyManager.getClass().getName());
-            Method methodGetITelephony = classTelephony.getDeclaredMethod("getITelephony");
-
-            // Ignore that the method is supposed to be private
-            methodGetITelephony.setAccessible(true);
+            Class<?> classTelephony = Class.forName(telephonyManager.getClass().getName());
+            Method method = classTelephony.getDeclaredMethod("getITelephony");
+            // Disable access check
+            method.setAccessible(true);
 
             // Invoke getITelephony() to get the ITelephony interface
-            Object telephonyInterface = methodGetITelephony.invoke(telephonyManager);
-
+            Object telephonyInterface = method.invoke(telephonyManager);
             // Get the endCall method from ITelephony
-            Class telephonyInterfaceClass =
-                    Class.forName(telephonyInterface.getClass().getName());
+            Class<?> telephonyInterfaceClass = Class.forName(telephonyInterface.getClass().getName());
             Method methodEndCall = telephonyInterfaceClass.getDeclaredMethod("endCall");
-
             // Invoke endCall()
             methodEndCall.invoke(telephonyInterface);
 
-        } catch (Exception ex) { // Many things can go wrong with reflection calls
-            Log.d("Tag","PhoneStateReceiver **" + ex.toString());
-            return false;
+        } catch (ClassNotFoundException e) {
+            Toast.makeText(getApplicationContext(), "ClassNotFoundException thrown", Toast.LENGTH_SHORT).show();
+        } catch (NoSuchMethodException e) {
+            Toast.makeText(getApplicationContext(), "NoSuchMethodException thrown", Toast.LENGTH_SHORT).show();
+        } catch (InvocationTargetException e) {
+            Toast.makeText(getApplicationContext(), "InvocationTargetException thrown", Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            Toast.makeText(getApplicationContext(), "IllegalAccessException thrown", Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
         }
         return true;
     }
