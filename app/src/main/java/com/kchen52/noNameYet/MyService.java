@@ -53,16 +53,16 @@ public class MyService extends Service {
 
         if (currentStatus == Status.DRIVING) {
             myBuilder.setSmallIcon(com.kchen52.noNameYet.R.mipmap.ic_directions_car_black_24dp)
-                    .setContentTitle("Currently driving.")
+                    .setContentTitle("Currently driving")
                     .setOngoing(true);
             if (hangupValue) {
-                myBuilder.setContentText("Hanging up incoming calls and sending text.");
+                myBuilder.setContentText("Rejecting calls.");
             } else {
-                myBuilder.setContentText("Will send a text message to callers.");
+                myBuilder.setContentText("Not rejecting calls.");
             }
         } else if (currentStatus == Status.NOT_DRIVING) {
             myBuilder.setSmallIcon(com.kchen52.noNameYet.R.mipmap.ic_directions_walk_black_24dp)
-                    .setContentTitle("Currently not driving.")
+                    .setContentTitle("Not driving")
                     //.setContentText("Not gonna do anything lol.")
                     .setOngoing(true);
         }
