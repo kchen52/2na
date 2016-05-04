@@ -235,6 +235,8 @@ public class MyService extends Service {
     }
 
     private void createMissedCallNotification(String numberMissed) {
+        // TODO: If the same number came in more than once, say that on the same notification
+        // e.g., 2 missed calls from 123-456-7890
         NotificationCompat.Builder myBuilder = new NotificationCompat.Builder(this);
         myBuilder.setContentTitle("Missed call while driving.");
         myBuilder.setContentText("Call from " + numberMissed);
