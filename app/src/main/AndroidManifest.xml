@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.kchen52._2na"
+    package="com.kchen52.twona"
     android:versionCode="2">
 
     <uses-sdk
@@ -19,7 +19,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".SettingsActivity"
+            android:name="com.kchen52.twona.SettingsActivity"
             android:label="2na">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,15 +28,15 @@
         </activity>
 
         <service
-            android:name="com.kchen52._2na.MyService"
+            android:name="com.kchen52.twona.MyService"
             android:exported="false">
             <intent-filter>
-                <action android:name="com.kchen52.noNameYet.MyService" />
+                <action android:name="com.kchen52.twona.MyService" />
             </intent-filter>
         </service>
 
         <receiver
-            android:name="com.kchen52._2na.StartMyServiceAtBootReceiver"
+            android:name="com.kchen52.twona.StartMyServiceAtBootReceiver"
             android:enabled="true"
             android:exported="true"
             android:label="StartMyServiceAtBootReceiver">

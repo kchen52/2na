@@ -1,4 +1,4 @@
-package com.kchen52._2na;
+package com.kchen52.twona;
 
 
 import android.annotation.TargetApi;
@@ -36,7 +36,7 @@ import java.util.List;
  */
 public class SettingsActivity extends PreferenceActivity {
 
-    private static final String SETTINGS_CHANGED = "com.kchen52._2na.SETTINGS_CHANGED";
+    private static final String SETTINGS_CHANGED = "com.kchen52.twona.SETTINGS_CHANGED";
 
     SharedPreferences.OnSharedPreferenceChangeListener spChanged = new SharedPreferences.OnSharedPreferenceChangeListener() {
         @Override
