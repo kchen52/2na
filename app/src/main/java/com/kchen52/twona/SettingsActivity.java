@@ -20,6 +20,7 @@ import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
 import android.text.TextUtils;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -41,6 +42,7 @@ public class SettingsActivity extends PreferenceActivity {
     SharedPreferences.OnSharedPreferenceChangeListener spChanged = new SharedPreferences.OnSharedPreferenceChangeListener() {
         @Override
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+            Toast.makeText(getApplicationContext(), "TESTING", Toast.LENGTH_LONG).show();
             Intent updateChanges = new Intent(SETTINGS_CHANGED);
             sendBroadcast(updateChanges);
         }
@@ -156,12 +158,9 @@ public class SettingsActivity extends PreferenceActivity {
         setupActionBar();
 
         PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(spChanged);
-        //getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(spChanged);
         Intent intent = null;
-        if (MyService.isRunning) {
-            //intent = new Intent(this, SettingsActivity.class);
-            //startActivity(intent);
-        } else {
+        // On the off chance the main service isn't running when this activity is started, start it
+        if (!MyService.isRunning) {
             intent = new Intent(this, MyService.class);
             startService(intent);
         }

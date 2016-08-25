@@ -32,6 +32,7 @@ public class MyService extends Service {
     // Keys for the sharedpreference
     private static final String AWAY_MESSAGE_KEY = "awayText";
     private static final String HANG_UP_KEY = "automaticallyHangUpCalls";
+    private static final String DRIVING_KEY = "setDrivingOrNot";
 
     // For grouping missed calls together as a notification
     private static final String MISSED_CALL_GROUP = "missedCallGroup";
@@ -156,16 +157,22 @@ public class MyService extends Service {
             } else if (intent.getAction().equals(CURRENTLY_DRIVING)) {
                 currentStatus = Status.DRIVING;
             } else if (intent.getAction().equals(SETTINGS_CHANGED)) {
+                // Changes were detected in the settings menu, so update the service accordingly
                 // Grab all the new settings
                 SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
                 // Grabs the saved away message if it exists. If not, use the default one.
                 String newAwayMessage= settings.getString(AWAY_MESSAGE_KEY, awayMessage);
                 boolean newHangupValue = settings.getBoolean(HANG_UP_KEY, false);
+                boolean drivingOrNot = settings.getBoolean(DRIVING_KEY, false);
 
+                if (drivingOrNot) {
+                    currentStatus = Status.DRIVING;
+                } else {
+                    currentStatus = Status.NOT_DRIVING;
+                }
                 awayMessage = newAwayMessage;
                 hangupValue = newHangupValue;
-
             }
             updateNotification();
         }
