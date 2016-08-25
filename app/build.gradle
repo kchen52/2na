@@ -5,7 +5,7 @@ android {
     buildToolsVersion "21.1.2"
 
     defaultConfig {
-        applicationId "com.kchen52.noNameYet"
+        applicationId "com.kchen52._2na"
         minSdkVersion 8
         targetSdkVersion 21
         versionCode 3

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.kchen52.noNameYet"
+    package="com.kchen52._2na"
     android:versionCode="2">
 
     <uses-sdk
@@ -28,7 +28,7 @@
         </activity>
 
         <service
-            android:name=".MyService"
+            android:name="com.kchen52._2na.MyService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.kchen52.noNameYet.MyService" />
@@ -36,7 +36,7 @@
         </service>
 
         <receiver
-            android:name=".StartMyServiceAtBootReceiver"
+            android:name="com.kchen52._2na.StartMyServiceAtBootReceiver"
             android:enabled="true"
             android:exported="true"
             android:label="StartMyServiceAtBootReceiver">

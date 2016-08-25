@@ -1,4 +1,4 @@
-package com.kchen52.noNameYet;
+package com.kchen52._2na;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -11,7 +11,6 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.IBinder;
-import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.telephony.SmsManager;
@@ -26,9 +25,9 @@ public class MyService extends Service {
     public static boolean isRunning = false;
 
     // Custom intents we're broadcasting and receiving
-    private static final String CURRENTLY_DRIVING = "com.kchen52.noNameYet.CURRENTLY_DRIVING";
-    private static final String NOT_DRIVING = "com.kchen52.noNameYet.NOT_DRIVING";
-    private static final String SETTINGS_CHANGED = "com.kchen52.noNameYet.SETTINGS_CHANGED";
+    private static final String CURRENTLY_DRIVING = "com.kchen52._2na.CURRENTLY_DRIVING";
+    private static final String NOT_DRIVING = "com.kchen52._2na.NOT_DRIVING";
+    private static final String SETTINGS_CHANGED = "com.kchen52._2na.SETTINGS_CHANGED";
 
     // Keys for the sharedpreference
     private static final String AWAY_MESSAGE_KEY = "awayText";
@@ -52,7 +51,7 @@ public class MyService extends Service {
         NotificationCompat.Builder myBuilder = new NotificationCompat.Builder(this);
 
         if (currentStatus == Status.DRIVING) {
-            myBuilder.setSmallIcon(com.kchen52.noNameYet.R.mipmap.ic_directions_car_black_24dp)
+            myBuilder.setSmallIcon(com.kchen52._2na.R.mipmap.ic_directions_car_black_24dp)
                     .setContentTitle("Currently driving")
                     .setOngoing(true);
             if (hangupValue) {
@@ -61,7 +60,7 @@ public class MyService extends Service {
                 myBuilder.setContentText("Not rejecting calls.");
             }
         } else if (currentStatus == Status.NOT_DRIVING) {
-            myBuilder.setSmallIcon(com.kchen52.noNameYet.R.mipmap.ic_directions_walk_black_24dp)
+            myBuilder.setSmallIcon(com.kchen52._2na.R.mipmap.ic_directions_walk_black_24dp)
                     .setContentTitle("Not driving")
                     //.setContentText("Not gonna do anything lol.")
                     .setOngoing(true);
@@ -88,8 +87,8 @@ public class MyService extends Service {
         long[] pattern = {50, 50};
         myBuilder.setVibrate(pattern);
 
-        myBuilder.addAction(com.kchen52.noNameYet.R.mipmap.ic_directions_car_black_24dp, "Driving", broadcastDriving_PI);
-        myBuilder.addAction(com.kchen52.noNameYet.R.mipmap.ic_directions_walk_black_24dp, "Not Driving", broadcastNotDriving_PI);
+        myBuilder.addAction(com.kchen52._2na.R.mipmap.ic_directions_car_black_24dp, "Driving", broadcastDriving_PI);
+        myBuilder.addAction(com.kchen52._2na.R.mipmap.ic_directions_walk_black_24dp, "Not Driving", broadcastNotDriving_PI);
         myBuilder.setCategory(Notification.CATEGORY_SERVICE);
         // Makes it so that the phone doesn't have to be unlocked to change status
         myBuilder.setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
