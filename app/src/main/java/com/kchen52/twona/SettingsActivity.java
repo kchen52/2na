@@ -20,7 +20,6 @@ import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
 import android.text.TextUtils;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import java.util.List;
 
@@ -42,7 +41,6 @@ public class SettingsActivity extends PreferenceActivity {
     SharedPreferences.OnSharedPreferenceChangeListener spChanged = new SharedPreferences.OnSharedPreferenceChangeListener() {
         @Override
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-            Toast.makeText(getApplicationContext(), "TESTING", Toast.LENGTH_LONG).show();
             Intent updateChanges = new Intent(SETTINGS_CHANGED);
             sendBroadcast(updateChanges);
         }

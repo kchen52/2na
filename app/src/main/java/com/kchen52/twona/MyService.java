@@ -152,14 +152,16 @@ public class MyService extends Service {
     public class StatusChangeReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
+            SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             if (intent.getAction().equals(NOT_DRIVING)) {
                 currentStatus = Status.NOT_DRIVING;
+                settings.edit().putBoolean(DRIVING_KEY, false);
             } else if (intent.getAction().equals(CURRENTLY_DRIVING)) {
                 currentStatus = Status.DRIVING;
+                settings.edit().putBoolean(DRIVING_KEY, true);
             } else if (intent.getAction().equals(SETTINGS_CHANGED)) {
                 // Changes were detected in the settings menu, so update the service accordingly
                 // Grab all the new settings
-                SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
                 // Grabs the saved away message if it exists. If not, use the default one.
                 String newAwayMessage= settings.getString(AWAY_MESSAGE_KEY, awayMessage);
