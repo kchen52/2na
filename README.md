@@ -1,5 +1,5 @@
 # 2na
-Can be found at https://play.google.com/store/apps/details?id=com.kchen52.noNameYet
+Can be found at https://play.google.com/store/apps/details?id=com.kchen52.twona
 
 An Android application that sends a text to the incoming caller that the owner is driving, and they're unable to pick up the phone at the moment by sending a user-defined text.
 
