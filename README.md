@@ -1,10 +1,20 @@
-# 2na
+# 2na <img src="http://i.imgur.com/VbrSspD.png" alt="app_icon" width="50" height="50">
+
+# Description
 Can be found at https://play.google.com/store/apps/details?id=com.kchen52.twona
 
-An Android application that sends a text to the incoming caller that the owner is driving, and they're unable to pick up the phone at the moment by sending a user-defined text.
+2na is an Android application that allows a user to block all incoming phone calls while driving. By default, any incoming calls will be automatically dropped when in "Driving" mode, although this can be changed in the settings. Any missed calls are displayed as a notification to the user.
 
 The message is set by launching the Settings activity, and set from there.
-Toggle between modes by clicking on the corresponding action in the notification bar.
+Toggle between Driving and Non-Driving modes by clicking on the corresponding action in the notification bar, or changing the value in the Settings Activity.
+
+# Screenshots
+<img src="http://imgur.com/m73YZ5Y.png" alt="app_icon" width="200" height="400">
+<img src="http://imgur.com/gRDJilr.png" alt="app_icon" width="200" height="400">
+<img src="http://imgur.com/8P7TCam.png" alt="app_icon" width="200" height="400">
+<img src="http://imgur.com/fJjw1j3.png" alt="app_icon" width="200" height="400">
+
+
 
 
 #### Permissions used:
