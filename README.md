@@ -1,7 +1,7 @@
 # 2na <img src="http://i.imgur.com/VbrSspD.png" alt="app_icon" width="50" height="50">
 
 # Description
-Can be found at https://play.google.com/store/apps/details?id=com.kchen52.twona
+The app can be found at https://play.google.com/store/apps/details?id=com.kchen52.twona
 
 2na is an Android application that allows a user to block all incoming phone calls while driving. By default, any incoming calls will be automatically dropped when in "Driving" mode, although this can be changed in the settings. Any missed calls are displayed as a notification to the user.
 
